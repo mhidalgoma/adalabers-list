@@ -23,9 +23,9 @@ useEffect(()=>{
 
 const tableData = data.map((adalaber)=>{
 return <tr key={adalaber.id}>
-<td>{adalaber.name}</td>
-<td>{adalaber.counselor}</td>
-<td>{adalaber.speciality}</td>
+<td className='table__name'>{adalaber.name}</td>
+<td className='table__counselor'>{adalaber.counselor}</td>
+<td className='table__speciality'>{adalaber.speciality}</td>
 </tr>
 });
 
@@ -52,22 +52,23 @@ const handleBtnNewAdalaber = (ev)=>{
 
   return (
     <div>
-      <header>
-      <h1>Adalabers</h1>
+      <header className='header'>
+      <h1 className='header__title'>Adalabers</h1>
       </header>
-      
+      <main className='main'>
       <table className="table">
         <thead><tr>
-          <th>Nombre</th>
-          <th>Tutora</th>
-          <th>Especialidad</th>
+          <th className='table__head'>Nombre</th>
+          <th className='table__head'>Tutora</th>
+          <th className='table__head'>Especialidad</th>
         </tr></thead>
         <tbody>
           {tableData}
         </tbody>
       </table>
-      <h2>Añadir una Adalaber</h2>
-      <form>
+      <h2 className='title__add'>Añadir una Adalaber</h2>
+      <form className='form'>
+        <div className='inputs__new'>
         <label htmlFor="name">Nombre</label>
         <input onChange={handleInputNewAdalaber} type="text" id='name' name='name' value={clearInput}/>
         <label htmlFor="counselor">Tutora</label>
@@ -75,8 +76,10 @@ const handleBtnNewAdalaber = (ev)=>{
         <label htmlFor="speciality">Especialidad</label>
         <input onChange={handleInputNewAdalaber} type="text" id='speciality' name='speciality' value={clearInput}/> 
         <p className={errorMsgClass}>Debes completar todos los campos para poder añadir una nueva Adalaber.</p>
-        <button onClick={handleBtnNewAdalaber}>Añadir una nueva Adalaber</button>
+        </div>
+        <button className='btn__add' onClick={handleBtnNewAdalaber}>Haz click para añadir una nueva Adalaber</button>
       </form>
+      </main>
     </div>
   );
 }
