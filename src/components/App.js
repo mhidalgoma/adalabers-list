@@ -1,18 +1,26 @@
 
 import '../styles/App.css';
-import { useState } from 'react';
-import adalabers from "../data/adalabers.json";
+import { useEffect, useState } from 'react';
+import getAdalabers from '../services/api';
 
 
 function App() {
-const [data, setData] = useState (adalabers.results);
-const [newAdalaber, setNewAdalaber] = useState ({
-  id: crypto.randomUUID(),
+const [data, setData] = useState([]);
+const [newAdalaber, setNewAdalaber] = useState({
+  //id: crypto.randomUUID(),
   name:'',
   counselor:'',
   speciality:'',
 });
 const [errorMsgClass, setErrorMsgClass] = useState ('hidden');
+
+
+
+useEffect(()=>{
+  getAdalabers().then(da=>{
+    setData(da.results);
+  });
+}, []);
 
 const tableData = data.map((adalaber)=>{
 return <tr key={adalaber.id}>
@@ -30,6 +38,7 @@ const handleBtnNewAdalaber = (ev)=>{
   if (newAdalaber.name === '' || newAdalaber.counselor==='' || newAdalaber.speciality === ''){
     setErrorMsgClass('');
   }else{
+    //setNewAdalaber ({...newAdalaber, id: crypto.randomUUID() });
     setData ([...data, newAdalaber]);
     setErrorMsgClass('hidden');
     console.log(data);
@@ -53,6 +62,7 @@ const handleBtnNewAdalaber = (ev)=>{
           {tableData}
         </tbody>
       </table>
+      <h2>Añadir una Adalaber</h2>
       <form>
         <label htmlFor="name">Nombre</label>
         <input onChange={handleInputNewAdalaber} type="text" id='name' name='name' />
