@@ -6,15 +6,14 @@ import getAdalabers from '../services/api';
 
 function App() {
 const [data, setData] = useState([]);
+const [clearInput, setClearInput] = useState();
 const [newAdalaber, setNewAdalaber] = useState({
-  //id: crypto.randomUUID(),
+  id: crypto.randomUUID(),
   name:'',
   counselor:'',
   speciality:'',
 });
 const [errorMsgClass, setErrorMsgClass] = useState ('hidden');
-
-
 
 useEffect(()=>{
   getAdalabers().then(da=>{
@@ -38,10 +37,15 @@ const handleBtnNewAdalaber = (ev)=>{
   if (newAdalaber.name === '' || newAdalaber.counselor==='' || newAdalaber.speciality === ''){
     setErrorMsgClass('');
   }else{
-    //setNewAdalaber ({...newAdalaber, id: crypto.randomUUID() });
     setData ([...data, newAdalaber]);
+    setNewAdalaber({ 
+      id: crypto.randomUUID(),
+      name:'',
+      counselor:'',
+      speciality:'',
+    });
+    setClearInput('');
     setErrorMsgClass('hidden');
-    console.log(data);
   }
   
 }
@@ -65,11 +69,11 @@ const handleBtnNewAdalaber = (ev)=>{
       <h2>Añadir una Adalaber</h2>
       <form>
         <label htmlFor="name">Nombre</label>
-        <input onChange={handleInputNewAdalaber} type="text" id='name' name='name' />
+        <input onChange={handleInputNewAdalaber} type="text" id='name' name='name' value={clearInput}/>
         <label htmlFor="counselor">Tutora</label>
-        <input onChange={handleInputNewAdalaber} type="text" id='counselor' name='counselor' />
+        <input onChange={handleInputNewAdalaber} type="text" id='counselor' name='counselor' value={clearInput}/>
         <label htmlFor="speciality">Especialidad</label>
-        <input onChange={handleInputNewAdalaber} type="text" id='speciality' name='speciality' /> 
+        <input onChange={handleInputNewAdalaber} type="text" id='speciality' name='speciality' value={clearInput}/> 
         <p className={errorMsgClass}>Debes completar todos los campos para poder añadir una nueva Adalaber.</p>
         <button onClick={handleBtnNewAdalaber}>Añadir una nueva Adalaber</button>
       </form>
