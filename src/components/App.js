@@ -5,15 +5,37 @@ import adalabers from "../data/adalabers.json";
 
 
 function App() {
-const [data, setData] = useState (adalabers);
+const [data, setData] = useState (adalabers.results);
+const [newAdalaber, setNewAdalaber] = useState ({
+  id:'',
+  name:'',
+  counselor:'',
+  speciality:'',
+});
+const [errorMsgClass, setErrorMsgClass] = useState ('hidden');
 
-const tableData = data.results.map ((adalaber)=>{
+const tableData = data.map((adalaber)=>{
 return <tr key={adalaber.id}>
 <td>{adalaber.name}</td>
 <td>{adalaber.counselor}</td>
 <td>{adalaber.speciality}</td>
 </tr>
-})
+});
+
+const handleInputNewAdalaber = (ev)=>{
+  setNewAdalaber ({...newAdalaber, [ev.target.name]: ev.target.value})
+}
+const handleBtnNewAdalaber = (ev)=>{
+  ev.preventDefault();
+  if (newAdalaber.name === '' || newAdalaber.counselor==='' || newAdalaber.speciality === ''){
+    setErrorMsgClass('');
+  }else{
+    setData ([...data, newAdalaber])
+    setErrorMsgClass('hidden');
+    console.log(data);
+  }
+  
+}
 
   return (
     <div>
@@ -32,13 +54,14 @@ return <tr key={adalaber.id}>
         </tbody>
       </table>
       <form>
-        <label htmlFor="firstName">Nombre</label>
-        <input type="text" id='firstName' name='firstName' />
+        <label htmlFor="name">Nombre</label>
+        <input onChange={handleInputNewAdalaber} type="text" id='name' name='name' />
         <label htmlFor="counselor">Tutora</label>
-        <input type="text" id='counselor' name='counselor' />
+        <input onChange={handleInputNewAdalaber} type="text" id='counselor' name='counselor' />
         <label htmlFor="speciality">Especialidad</label>
-        <input type="text" id='speciality' name='speciality' /> 
-        <button>Añadir una nueva Adalaber</button>
+        <input onChange={handleInputNewAdalaber} type="text" id='speciality' name='speciality' /> 
+        <p className={errorMsgClass}>Debes completar todos los campos para poder añadir una nueva Adalaber.</p>
+        <button onClick={handleBtnNewAdalaber}>Añadir una nueva Adalaber</button>
       </form>
     </div>
   );
