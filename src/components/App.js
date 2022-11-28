@@ -7,7 +7,7 @@ import adalabers from "../data/adalabers.json";
 function App() {
 const [data, setData] = useState (adalabers.results);
 const [newAdalaber, setNewAdalaber] = useState ({
-  id:'',
+  id: crypto.randomUUID(),
   name:'',
   counselor:'',
   speciality:'',
@@ -30,7 +30,7 @@ const handleBtnNewAdalaber = (ev)=>{
   if (newAdalaber.name === '' || newAdalaber.counselor==='' || newAdalaber.speciality === ''){
     setErrorMsgClass('');
   }else{
-    setData ([...data, newAdalaber])
+    setData ([...data, newAdalaber]);
     setErrorMsgClass('hidden');
     console.log(data);
   }
