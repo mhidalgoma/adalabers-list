@@ -7,6 +7,9 @@ import { v4 as uuid } from 'uuid';
 
 function App() {
 const [data, setData] = useState([]);
+const [filteredData, setFilteredData] = useState([]);
+const [inputNameFilter, setInputNameFilter] = useState('');
+
 const [inputName, setInputName] = useState('');
 const [inputTutor, setInputTutor] = useState('');
 const [inputSpeciality, setInputSpeciality] = useState('');
@@ -26,14 +29,37 @@ useEffect(()=>{
   });
 }, []);
 
-const tableData = data.map((adalaber)=>{
-return <tr key={adalaber.id}>
-<td className='table__name'>{adalaber.name}</td>
-<td className='table__counselor'>{adalaber.counselor}</td>
-<td className='table__speciality'>{adalaber.speciality}</td>
-</tr>
-});
+const removeAccents = (str) => {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+} 
 
+const renderAdalabers =()=>{
+  let tableData;
+if (inputNameFilter === ''){
+  tableData = data.map((adalaber)=>{
+    return <tr key={adalaber.id}>
+    <td className='table__name'>{adalaber.name}</td>
+    <td className='table__counselor'>{adalaber.counselor}</td>
+    <td className='table__speciality'>{adalaber.speciality}</td>
+    </tr>
+    });
+} else{
+  tableData = filteredData.map((adalaber)=>{
+    return <tr key={adalaber.id}>
+    <td className='table__name'>{adalaber.name}</td>
+    <td className='table__counselor'>{adalaber.counselor}</td>
+    <td className='table__speciality'>{adalaber.speciality}</td>
+    </tr>
+    });
+}
+return tableData;
+}
+
+const handleInputNameFilter = (ev)=>{
+setInputNameFilter(ev.target.value);
+const filteredAdalabers = data.filter((adalaber)=>removeAccents(adalaber.name.toLowerCase()).includes(ev.target.value.toLowerCase()));
+setFilteredData(filteredAdalabers);
+}
 const handleInputNewAdalaber = (ev)=>{
 if (ev.target.name === 'name'){
   setInputName(ev.target.value);
@@ -72,6 +98,11 @@ const handleBtnNewAdalaber = (ev)=>{
       <h1 className='header__title'>Adalabers</h1>
       </header>
       <main className='main'>
+        <form>
+        <label htmlFor="name">Buscar por nombre</label>
+        <input onChange={handleInputNameFilter} type="text" id='name' name='name' value={inputNameFilter}/>
+
+        </form>
       <table className="table">
         <thead><tr>
           <th className='table__head'>Nombre</th>
@@ -79,7 +110,7 @@ const handleBtnNewAdalaber = (ev)=>{
           <th className='table__head'>Especialidad</th>
         </tr></thead>
         <tbody>
-          {tableData}
+          {renderAdalabers()}
         </tbody>
       </table>
       <h2 className='title__add'>Añadir una Adalaber</h2>
