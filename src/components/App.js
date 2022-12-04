@@ -37,13 +37,13 @@ return <tr key={adalaber.id}>
 const handleInputNewAdalaber = (ev)=>{
 if (ev.target.name === 'name'){
   setInputName(ev.target.value);
-  setNewAdalaber ({...newAdalaber, name:inputName})
+  setNewAdalaber ({...newAdalaber, name: ev.target.value})
 }else if (ev.target.name === 'counselor'){
   setInputTutor(ev.target.value);
-  setNewAdalaber ({...newAdalaber, counselor: inputTutor})
+  setNewAdalaber ({...newAdalaber, counselor: ev.target.value})
 }else{
   setInputSpeciality(ev.target.value);
-  setNewAdalaber ({...newAdalaber, speciality: inputSpeciality})
+  setNewAdalaber ({...newAdalaber, speciality: ev.target.value})
 }
 }
 const handleBtnNewAdalaber = (ev)=>{
@@ -53,7 +53,7 @@ const handleBtnNewAdalaber = (ev)=>{
   }else{
     setData ([...data, newAdalaber]);
     setNewAdalaber({ 
-      id: crypto.randomUUID(),
+      id: uuid(),
       name:'',
       counselor:'',
       speciality:'',
