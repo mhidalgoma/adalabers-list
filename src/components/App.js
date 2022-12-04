@@ -6,72 +6,83 @@ import { v4 as uuid } from 'uuid';
 
 
 function App() {
+//VARIABLES DE ESTADO
 const [data, setData] = useState([]);
 const [filteredData, setFilteredData] = useState([]);
 const [inputNameFilter, setInputNameFilter] = useState('');
-
+const [selectCounselor, setSelectCounselor] = useState('');
 const [inputName, setInputName] = useState('');
 const [inputTutor, setInputTutor] = useState('');
 const [inputSpeciality, setInputSpeciality] = useState('');
-
 const [newAdalaber, setNewAdalaber] = useState({
   id: uuid(),
   name:'',
   counselor:'',
   speciality:'',
 });
-
 const [errorMsgClass, setErrorMsgClass] = useState ('hidden');
 
+//USE EFFECT
 useEffect(()=>{
   getAdalabers().then(da=>{
     setData(da.results);
   });
 }, []);
+//FUNCIONES DE UTILIDADES
 
-const removeAccents = (str) => {
-  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-} 
 
-const renderAdalabers =()=>{
-  let tableData;
-if (inputNameFilter === ''){
-  tableData = data.map((adalaber)=>{
-    return <tr key={adalaber.id}>
-    <td className='table__name'>{adalaber.name}</td>
-    <td className='table__counselor'>{adalaber.counselor}</td>
-    <td className='table__speciality'>{adalaber.speciality}</td>
-    </tr>
-    });
-} else{
-  tableData = filteredData.map((adalaber)=>{
-    return <tr key={adalaber.id}>
-    <td className='table__name'>{adalaber.name}</td>
-    <td className='table__counselor'>{adalaber.counselor}</td>
-    <td className='table__speciality'>{adalaber.speciality}</td>
-    </tr>
-    });
-}
-return tableData;
-}
-
+// FUNCIONES HANDLER
 const handleInputNameFilter = (ev)=>{
-setInputNameFilter(ev.target.value);
-const filteredAdalabers = data.filter((adalaber)=>removeAccents(adalaber.name.toLowerCase()).includes(ev.target.value.toLowerCase()));
-setFilteredData(filteredAdalabers);
+  setInputNameFilter(ev.target.value);
+  const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  } 
+  if (selectCounselor === ''){
+    const filteredAdalabers = data.filter((adalaber)=>removeAccents(adalaber.name.toLowerCase()).includes(ev.target.value.toLowerCase()));
+    setFilteredData(filteredAdalabers);
+  }else{
+    const filteredAdalabers = data.filter((adalaber)=>
+    removeAccents(adalaber.name.toLowerCase()).includes(ev.target.value.toLowerCase()) 
+    && 
+    adalaber.counselor.toLowerCase() === selectCounselor);
+    setFilteredData(filteredAdalabers);
+  } 
 }
+
+const handleSelectCounselor = (ev)=>{
+  setSelectCounselor(ev.target.value);
+  const removeAccents = (str) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  } 
+  if (inputNameFilter === ''){
+    const filteredAdalabers = data.filter((adalaber)=> adalaber.counselor.toLowerCase() === ev.target.value);
+    setFilteredData(filteredAdalabers);
+  }else{
+    const filteredAdalabers = data.filter((adalaber)=>
+    removeAccents(adalaber.name.toLowerCase()).includes(inputNameFilter.toLowerCase()) && 
+    adalaber.counselor.toLowerCase() === ev.target.value);
+    setFilteredData(filteredAdalabers);
+  } 
+}
+
+
+
+
+
+
+
 const handleInputNewAdalaber = (ev)=>{
-if (ev.target.name === 'name'){
-  setInputName(ev.target.value);
-  setNewAdalaber ({...newAdalaber, name: ev.target.value})
-}else if (ev.target.name === 'counselor'){
-  setInputTutor(ev.target.value);
-  setNewAdalaber ({...newAdalaber, counselor: ev.target.value})
-}else{
-  setInputSpeciality(ev.target.value);
-  setNewAdalaber ({...newAdalaber, speciality: ev.target.value})
-}
-}
+    if (ev.target.name === 'name'){
+      setInputName(ev.target.value);
+      setNewAdalaber ({...newAdalaber, name: ev.target.value})
+    }else if (ev.target.name === 'counselor'){
+      setInputTutor(ev.target.value);
+      setNewAdalaber ({...newAdalaber, counselor: ev.target.value})
+    }else{
+      setInputSpeciality(ev.target.value);
+      setNewAdalaber ({...newAdalaber, speciality: ev.target.value})
+    }
+    }
 const handleBtnNewAdalaber = (ev)=>{
   ev.preventDefault();
   if (newAdalaber.name === '' || newAdalaber.counselor==='' || newAdalaber.speciality === ''){
@@ -88,8 +99,31 @@ const handleBtnNewAdalaber = (ev)=>{
     setInputTutor('');
     setInputSpeciality('');
     setErrorMsgClass('hidden');
-  }
-  
+  } 
+}
+
+
+// FUNCIONES RENDER
+const renderAdalabers =()=>{
+  let tableData;
+  if (inputNameFilter === '' && selectCounselor === ''){
+    tableData = data.map((adalaber)=>{
+      return <tr key={adalaber.id}>
+      <td className='table__name'>{adalaber.name}</td>
+      <td className='table__counselor'>{adalaber.counselor}</td>
+      <td className='table__speciality'>{adalaber.speciality}</td>
+      </tr>
+    });
+  }else{
+    tableData = filteredData.map((adalaber)=>{
+      return <tr key={adalaber.id}>
+      <td className='table__name'>{adalaber.name}</td>
+      <td className='table__counselor'>{adalaber.counselor}</td>
+      <td className='table__speciality'>{adalaber.speciality}</td>
+      </tr>
+    });
+}
+return tableData;
 }
 
   return (
@@ -99,9 +133,17 @@ const handleBtnNewAdalaber = (ev)=>{
       </header>
       <main className='main'>
         <form>
-        <label htmlFor="name">Buscar por nombre</label>
+        <label htmlFor="name">Buscar por nombre:</label>
         <input onChange={handleInputNameFilter} type="text" id='name' name='name' value={inputNameFilter}/>
 
+        <label htmlFor="counselors">Escoge una tutora:</label>
+        <select name="counselors" id="counselors" onChange={handleSelectCounselor}>
+        <option value="">Cualquiera</option>
+        <option value="yanelis">Yanelis</option>
+        <option value="dayana">Dayana</option>
+        <option value="ivan">Iván</option>
+        <option value="miguel">Miguel</option>
+</select>
         </form>
       <table className="table">
         <thead><tr>
