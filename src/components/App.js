@@ -6,13 +6,16 @@ import getAdalabers from '../services/api';
 
 function App() {
 const [data, setData] = useState([]);
-const [clearInput, setClearInput] = useState();
+const [inputName, setInputName] = useState('');
+const [inputTutor, setInputTutor] = useState('');
+const [inputSpeciality, setInputSpeciality] = useState('');
 const [newAdalaber, setNewAdalaber] = useState({
   id: crypto.randomUUID(),
   name:'',
   counselor:'',
   speciality:'',
 });
+
 const [errorMsgClass, setErrorMsgClass] = useState ('hidden');
 
 useEffect(()=>{
@@ -30,7 +33,16 @@ return <tr key={adalaber.id}>
 });
 
 const handleInputNewAdalaber = (ev)=>{
-  setNewAdalaber ({...newAdalaber, [ev.target.name]: ev.target.value})
+if (ev.target.name === 'name'){
+  setInputName(ev.target.value);
+  setNewAdalaber ({...newAdalaber, name:inputName})
+}else if (ev.target.name === 'counselor'){
+  setInputTutor(ev.target.value);
+  setNewAdalaber ({...newAdalaber, counselor: inputTutor})
+}else{
+  setInputSpeciality(ev.target.value);
+  setNewAdalaber ({...newAdalaber, speciality: inputSpeciality})
+}
 }
 const handleBtnNewAdalaber = (ev)=>{
   ev.preventDefault();
@@ -44,7 +56,9 @@ const handleBtnNewAdalaber = (ev)=>{
       counselor:'',
       speciality:'',
     });
-    setClearInput('');
+    setInputName('');
+    setInputTutor('');
+    setInputSpeciality('');
     setErrorMsgClass('hidden');
   }
   
@@ -70,11 +84,11 @@ const handleBtnNewAdalaber = (ev)=>{
       <form className='form'>
         <div className='inputs__new'>
         <label htmlFor="name">Nombre</label>
-        <input onChange={handleInputNewAdalaber} type="text" id='name' name='name' value={clearInput}/>
+        <input onChange={handleInputNewAdalaber} type="text" id='name' name='name' value={inputName}/>
         <label htmlFor="counselor">Tutora</label>
-        <input onChange={handleInputNewAdalaber} type="text" id='counselor' name='counselor' value={clearInput}/>
+        <input onChange={handleInputNewAdalaber} type="text" id='counselor' name='counselor' value={inputTutor}/>
         <label htmlFor="speciality">Especialidad</label>
-        <input onChange={handleInputNewAdalaber} type="text" id='speciality' name='speciality' value={clearInput}/> 
+        <input onChange={handleInputNewAdalaber} type="text" id='speciality' name='speciality' value={inputSpeciality}/> 
         <p className={errorMsgClass}>Debes completar todos los campos para poder añadir una nueva Adalaber.</p>
         </div>
         <button className='btn__add' onClick={handleBtnNewAdalaber}>Haz click para añadir una nueva Adalaber</button>
