@@ -2,6 +2,7 @@
 import '../styles/App.css';
 import { useEffect, useState } from 'react';
 import getAdalabers from '../services/api';
+import { v4 as uuid } from 'uuid';
 
 
 function App() {
@@ -9,8 +10,9 @@ const [data, setData] = useState([]);
 const [inputName, setInputName] = useState('');
 const [inputTutor, setInputTutor] = useState('');
 const [inputSpeciality, setInputSpeciality] = useState('');
+
 const [newAdalaber, setNewAdalaber] = useState({
-  id: crypto.randomUUID(),
+  id: uuid(),
   name:'',
   counselor:'',
   speciality:'',
