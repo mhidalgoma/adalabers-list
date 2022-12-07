@@ -118,7 +118,7 @@ function App() {
         const renderSocialNetworks = adalaber.social_networks.map(
           (network, index) => {
             return (
-              <div key={index}>
+              <div className="div" key={index}>
                 <a href={network.url}>{network.name}</a>
               </div>
             );
@@ -163,7 +163,7 @@ function App() {
         <h1 className="header__title">Adalabers</h1>
       </header>
       <main className="main">
-        <form>
+        <form className="form__filters">
           <label htmlFor="name">Buscar por nombre:</label>
           <input
             onChange={handleInputNameFilter}
@@ -175,6 +175,7 @@ function App() {
 
           <label htmlFor="counselors">Escoge una tutora:</label>
           <select
+            className="select"
             name="counselors"
             id="counselors"
             onChange={handleSelectCounselor}
@@ -198,7 +199,7 @@ function App() {
           <tbody>{renderAdalabers()}</tbody>
         </table>
         <h2 className="title__add">Añadir una Adalaber</h2>
-        <form className="form">
+        <form className="form__inputs">
           <div className="inputs__new">
             <label htmlFor="name">Nombre</label>
             <input
