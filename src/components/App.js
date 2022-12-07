@@ -17,6 +17,7 @@ function App() {
     name: '',
     counselor: '',
     speciality: '',
+    social_networks: [],
   });
   const [errorMsgClass, setErrorMsgClass] = useState('hidden');
 
@@ -100,6 +101,7 @@ function App() {
         name: '',
         counselor: '',
         speciality: '',
+        social_networks: [],
       });
       setInputName('');
       setInputTutor('');
@@ -113,21 +115,41 @@ function App() {
     let tableData;
     if (inputNameFilter === '' && selectCounselor === '') {
       tableData = data.map((adalaber) => {
+        const renderSocialNetworks = adalaber.social_networks.map(
+          (network, index) => {
+            return (
+              <div key={index}>
+                <a href={network.url}>{network.name}</a>
+              </div>
+            );
+          }
+        );
         return (
           <tr key={adalaber.id}>
             <td className="table__name">{adalaber.name}</td>
             <td className="table__counselor">{adalaber.counselor}</td>
             <td className="table__speciality">{adalaber.speciality}</td>
+            <td className="table__networks">{renderSocialNetworks}</td>
           </tr>
         );
       });
     } else {
       tableData = filteredData.map((adalaber) => {
+        const renderSocialNetworks = adalaber.social_networks.map(
+          (network, index) => {
+            return (
+              <div key={index}>
+                <a href={network.url}>{network.name}</a>
+              </div>
+            );
+          }
+        );
         return (
           <tr key={adalaber.id}>
             <td className="table__name">{adalaber.name}</td>
             <td className="table__counselor">{adalaber.counselor}</td>
             <td className="table__speciality">{adalaber.speciality}</td>
+            <td className="table__networks">{renderSocialNetworks}</td>
           </tr>
         );
       });
@@ -170,6 +192,7 @@ function App() {
               <th className="table__head">Nombre</th>
               <th className="table__head">Tutora</th>
               <th className="table__head">Especialidad</th>
+              <th className="table__head">Redes sociales</th>
             </tr>
           </thead>
           <tbody>{renderAdalabers()}</tbody>
